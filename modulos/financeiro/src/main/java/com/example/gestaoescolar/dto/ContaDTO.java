@@ -1,0 +1,16 @@
+package com.example.gestaoescolar.financeiro.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ContaDTO {
+    private Long id;
+    private String titular;
+    private BigDecimal saldo;
+}
