@@ -5,7 +5,6 @@ import com.example.gestaoescolar.secretaria.entity.Funcionario;
 import com.example.gestaoescolar.secretaria.repository.FuncionarioRepository;
 import com.example.gestaoescolar.shared.funcionario.EntidadeBase;
 import com.example.gestaoescolar.shared.event.EventoFuncionario;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +64,7 @@ public class FuncionarioService {
                 .orElseThrow(() -> new RuntimeException("Nenhum funcionário com esse numero: " + numeroFuncionario));
     }
 
-    public List<Funcionario> findByDepartment(String departamento) {
-        return repo.findByDepartment(departamento);
+    public List<Funcionario> findByDepartamento(String departamento) {
+        return repo.findByDepartamento(departamento);
     }
 }

@@ -21,10 +21,8 @@ public class AgendaService {
     private FuncionarioRepository funcionarioRepo;
 
     public Agenda create(Agenda agenda) {
-        Funcionario employee = funcionarioRepo.findById(agenda.getEmployee().getId())
-                .orElseThrow(() -> new RuntimeException("Funcionario not found"));
-
-        agenda.setEmployee(employee);
+        Funcionario f = funcionarioRepo.findById(agenda.getFuncionario().getId());
+        agenda.setFuncionario(f);
         return repo.save(agenda);
     }
 
@@ -37,25 +35,24 @@ public class AgendaService {
         return repo.findAll();
     }
 
-    public List<Agenda> findByEmployee(Long funcionarioId) {
-        Funcionario employee = funcionarioRepo.findById(funcionarioId)
-                .orElseThrow(() -> new RuntimeException("Funcionario not found"));
-        return repo.findByEmployee(employee);
+    public List<Agenda> findByFuncionario(Long funcionarioId) {
+        Funcionario f = funcionarioRepo.findById(funcionarioId);
+        return repo.findByFuncionario(f);
     }
 
     public Agenda update(Long id, Agenda agenda) {
-        Agenda schedule = findById(id);
+        Agenda agenda = findById(id);
 
-        schedule.setStartDateTime(agenda.getStartDateTime());
-        schedule.setEndDateTime(agenda.getEndDateTime());
-        schedule.setLocation(agenda.getLocation());
-        schedule.setScheduleType(agenda.getScheduleType());
-        schedule.setStatus(agenda.getStatus());
-        if (agenda.getEmployee() != null) {
-            schedule.setEmployee(agenda.getEmployee());
+        agenda.setStartDateTime(agenda.getStartDateTime());
+        agenda.setEndDateTime(agenda.getEndDateTime());
+        agenda.setLocal(agenda.getLocal());
+        agenda.setTipo(agenda.getTipo());
+        agenda.setStatus(agenda.getStatus());
+        if (agenda.getFuncionario() != null) {
+            agenda.setFuncionario(agenda.getFuncionario());
         }
 
-        return repo.save(schedule);
+        return repo.save(agenda);
     }
 
     public void delete(Long id) {

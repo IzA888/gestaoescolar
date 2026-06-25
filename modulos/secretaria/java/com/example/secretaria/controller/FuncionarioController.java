@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/employees")
+@RequestMapping("/funcionario")
 public class FuncionarioController {
 
     @Autowired
-    private FuncionarioService funcionarioService;
+    private FuncionarioService service;
 
     private Funcionario toEntity(FuncionarioDTO dto) {
         if (dto == null) {
@@ -36,50 +36,57 @@ public class FuncionarioController {
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }
+        
+    private List<FuncionarioDTO> toDtoList(List<Funcionario> entity) {
+        if (entity == null) {
+            return null;
+        }
+        return entity.stream().map(Funcionario::toDto).collect(Collectors.toList());
+    }
 
     @PostMapping
     public ResponseEntity<FuncionarioDTO> create(@RequestBody FuncionarioDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(funcionarioService.create(toEntity(dto))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(service.create(toEntity(dto))));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> findById(@PathVariable Long id) {
-        return funcionarioService.findById(id)
-                .map(this::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok().body.(
+            toDto(service.findById(id))
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<FuncionarioDTO>> findAll() {
-        return ResponseEntity.ok(funcionarioService.findAll().stream()
-                .map(this::toDto)
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok().body(
+            toDtoList(service.findAll())
+        );
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> update(@PathVariable Long id, @RequestBody FuncionarioDTO dto) {
-        return ResponseEntity.ok(toDto(funcionarioService.update(id, toEntity(dto))));
+        return ResponseEntity.ok().body(
+            toDto(service.update(id, toEntity(dto)))
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        funcionarioService.delete(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/employee-number/{numeroFuncionario}")
-    public ResponseEntity<FuncionarioDTO> findByEmployeeNumber(@PathVariable String numeroFuncionario) {
-        return funcionarioService.findByEmployeeNumber(numeroFuncionario)
-                .map(this::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{numeroFuncionario}")
+    public ResponseEntity<FuncionarioDTO> findByNumeroFuncionario(@PathVariable String numeroFuncionario) {
+        return ResponseEntity.ok().body(
+            toDto(service.findByNumeroFuncionario(numeroFuncionario))
+        );
     }
 
     @GetMapping("/departamento/{departamento}")
     public ResponseEntity<List<FuncionarioDTO>> findByDepartment(@PathVariable String departamento) {
-        return ResponseEntity.ok(funcionarioService.findByDepartment(departamento).stream()
-                .map(this::toDto)
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok().body(
+                toDtoList(service.findByDepartamento(departamento))
+                );
     }
 }

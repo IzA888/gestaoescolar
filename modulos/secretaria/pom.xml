@@ -10,14 +10,11 @@
     </parent>
 
     <artifactId>secretaria</artifactId>
+    <version>0.1</version>
 
     <dependencies>
         <dependency>
-            <groupId>com.example.gestaoescolar</groupId>
-            <artifactId>financeiro</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.example.gestaoescolar</groupId>
+            <groupId>com.example.shared</groupId>
             <artifactId>shared</artifactId>
         </dependency>
     </dependencies>

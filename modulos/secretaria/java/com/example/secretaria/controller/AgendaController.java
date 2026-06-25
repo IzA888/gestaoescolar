@@ -13,53 +13,48 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/schedules")
+@RequestMapping("/agenda")
 public class AgendaController {
 
     @Autowired
-    private AgendaService scheduleService;
+    private AgendaService service;
 
     @PostMapping
     public ResponseEntity<AgendaDTO> create(@RequestBody AgendaDTO dto) {
-        Agenda entity = toEntity(dto);
-        Agenda saved = scheduleService.create(entity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            toDto(service.create(toEntity(dto)))
+        );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AgendaDTO> findById(@PathVariable Long id) {
-        return scheduleService.findById(id)
-                .map(this::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok().body(
+            toDTO(service.findById(id))
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<AgendaDTO>> findAll() {
-        List<AgendaDTO> dtos = scheduleService.findAll().stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ReponseEntity.ok().body(toDTOList(service.findAll()));
     }
 
-    @GetMapping("/employee/{funcionarioId}")
+    @GetMapping("/funcionario/{funcionarioId}")
     public ResponseEntity<List<AgendaDTO>> findByEmployee(@PathVariable Long funcionarioId) {
-        List<AgendaDTO> dtos = scheduleService.findByEmployee(funcionarioId).stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok().body(
+            toDTOList(service.findByFuncionario(funcionarioId))
+        );
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AgendaDTO> update(@PathVariable Long id, @RequestBody AgendaDTO dto) {
-        Agenda entity = toEntity(dto);
-        Agenda updated = scheduleService.update(id, entity);
-        return ResponseEntity.ok(toDto(updated));
+        return ResponseEntity.ok().body(
+            toDto( service.update(id, toEntity(dto) ))
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        scheduleService.delete(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -79,5 +74,12 @@ public class AgendaController {
         AgendaDTO dto = new AgendaDTO();
         BeanUtils.copyProperties(entity, dto);
         return dto;
+    }
+    
+    private List<AgendaDTO> toDto(List<Agenda> entity) {
+        if (entity == null) {
+            return null;
+        }
+        return entity.stream().map(Agenda::toDTO).collect(Collectors.toList());
     }
 }

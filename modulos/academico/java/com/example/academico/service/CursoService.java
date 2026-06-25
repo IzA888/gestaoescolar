@@ -29,13 +29,13 @@ public class CursoService {
     }
 
     public Curso update(Long id, Curso curso) {
-        Curso existing = findById(id);
+        Curso existente = findById(id);
 
-        existing.setName(curso.getName());
-        existing.setDescription(curso.getDescription());
-        existing.setCredits(curso.getCredits());
+        existente.setName(curso.getName());
+        existente.setDescription(curso.getDescription());
+        existente.setCredits(curso.getCredits());
 
-        return repo.save(existing);
+        return repo.save(existente);
     }
 
     public void delete(Long id) {

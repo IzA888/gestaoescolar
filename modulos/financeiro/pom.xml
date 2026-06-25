@@ -10,6 +10,12 @@
     </parent>
 
     <artifactId>financeiro</artifactId>
+    <version>0.1</version>
+ <dependencies>
+        <dependency>
+            <groupId>com.example.shared</groupId>
+            <artifactId>shared</artifactId>
+encies>
     <build>
         <plugins>
             <plugin>
